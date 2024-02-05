@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+  min-width: 320px;
+  margin: 0;
+  background: #f5f5f5;
+}
+
+header {
+  box-shadow: 0px 3.3862948417663574px 5.643825054168701px 0px #b0bec552;
+  box-shadow: 0px 9.030119895935059px 27.09035873413086px 0px #b0bec552;
+}
