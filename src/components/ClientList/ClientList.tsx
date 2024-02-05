@@ -1,59 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import { ClientListHeader } from "./clientList-header";
 import { Client } from "./clientList-client";
 
+interface Contact {
+  type: string;
+  value: string;
+}
+
 interface Client {
   id: number;
   name: string;
+  surname: string;
+  lastName: string;
   createdAt: string;
   updatedAt: string;
-  contacts: string;
-  [key: string]: string | number;
+  contacts: Contact[];
+  [key: string]: string | number | Contact[];
 }
 
-const mockClients: Client[] = [
-  {
-    id: 1,
-    name: "А А А",
-    createdAt: "2023-05-15 08:20",
-    updatedAt: "2023-01-02 15:30",
-    contacts: "укн@mail.com",
-  },
-  {
-    id: 2,
-    name: "Б Б Б",
-    createdAt: "2023-02-05 14:45",
-    updatedAt: "2023-02-08 12:20",
-    contacts: "фыренм@mail.com",
-  },
-  {
-    id: 3,
-    name: "В В В",
-    createdAt: "2023-04-20 11:30",
-    updatedAt: "2023-03-12 18:30",
-    contacts: "рфуе@mail.com",
-  },
-  {
-    id: 4,
-    name: "Г Г Г",
-    createdAt: "2023-03-10 09:15",
-    updatedAt: "2023-04-22 14:55",
-    contacts: "йцу@mail.com",
-  },
-  {
-    id: 5,
-    name: "Д Д Д",
-    createdAt: "2023-01-01 10:00",
-    updatedAt: "2023-05-18 16:40",
-    contacts: "фыв@mail.com",
-  },
-];
-
 const ClientList: React.FC = () => {
-  const [clients, setClients] = useState<Client[]>(mockClients);
+  const [clients, setClients] = useState<Client[]>([]);
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
+  useEffect(() => {
+    // Функция для получения списка клиентов с сервера
+    const fetchClients = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/clients");
+        setClients(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching clients:", error);
+      }
+    };
+
+    // Вызываем функцию при загрузке компонента
+    fetchClients();
+  }, []); // Пустой массив означает, что этот эффект будет выполняться только при монтировании компонента
 
   const handleSort = (field: string, order: "asc" | "desc") => {
     const sortedClients = [...clients].sort((a, b) => {
